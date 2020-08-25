@@ -1,6 +1,6 @@
 # Exceptions and Pickling
 
-*J. Brecht, 8-24-2020
+*J. Brecht, 8-24-2020*
 
 ## Introduction
 We have been asked to describe and demonstrate pickling and exception handling. I decided to work with the To Do List program from the module 6 assignment. That way the new techniques can be directly compared to the old. The program reads an existing list and can add, delete, and print the tasks and their priorities, or save the information back to the file. When adding tasks, the program asks for the name of a task, and then asks for its priority. Both pieces of data are stored in a dictionary, where each task and priority are a row of data. Each dictionary entry is then added to a list to create a table of data which can then be printed or saved. This is similar to the To Do List program developed for the Module 5 assignment, but uses classes and functions to organize the script.
