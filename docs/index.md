@@ -1,4 +1,7 @@
 # Exceptions and Pickling
+
+*J. Brecht, 8-24-2020
+
 ## Introduction
 We have been asked to describe and demonstrate pickling and exception handling. I decided to work with the To Do List program from the module 6 assignment. That way the new techniques can be directly compared to the old. The program reads an existing list and can add, delete, and print the tasks and their priorities, or save the information back to the file. When adding tasks, the program asks for the name of a task, and then asks for its priority. Both pieces of data are stored in a dictionary, where each task and priority are a row of data. Each dictionary entry is then added to a list to create a table of data which can then be printed or saved. This is similar to the To Do List program developed for the Module 5 assignment, but uses classes and functions to organize the script.
 ## Exception Handling
@@ -8,7 +11,8 @@ According to the Tutorials Point website,
 >
 In Python, when an error occurs, an exception is raised and the programmer can choose how to address it. Different kinds of errors result in different types of exceptions, some of which are easier to understand than others. “ZeroDivisionError” is pretty self-explanatory, but something like “KeyError” or “SyntaxError” will not be very helpful to most users.
 In the module 6 code, the first step for the script is to load into memory any data from a text file, in this case “ToDoFile.txt.” The problem, of course, is that the text file may not exist, as was the case the first time I ran the script. Since the text file ToDoList.txt did not exist, the program gave the “FileNotFoundError” shown in Figure 1.
- 
+
+![Figure 1](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure1.png "Missing file error") 
 #### Figure 1: Missing file error
 This particular error is pretty clear: No such file or directory exists. However, the user will not necessarily know what to do with that information. Try to create the file? Where does it go? What data should be in it? There needs to be something in the code to address the fact that the file may not exist without confusing the user.
 In my case, rather than creating an initial text file, I had imported os.path and checked to see if the file existed as shown in Figure 2.
@@ -48,9 +52,11 @@ return list_of_rows, 'Success!'
 #### Figure 3: Code for try..except error handling
 Instead of importing the module ‘os’ and checking for the file with an if statement, the try block attempts to open the file. If the file is not found, the exception is caught and the file is created (see Figure 4).
  
+![Figure 4](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure4.png "ToDoFile.txt created") 
 #### Figure 4: ToDoFile.txt created
 The user is informed that the task list is empty as shown in Figure 5. Notice that the program continues and returns the empty list_of_rows, which is shown to the user as well.
  
+![Figure 5](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure5.png "Except block") 
 #### Figure 5: Result of except block
 I could have used a generic except clause without the error name, but that would handle any type of error. I have learned to account for the text file possibly missing, but if something else is raising exceptions, I want to know what it is (spoiler alert: there is).
 ## What is Pickle and Why?
@@ -78,6 +84,7 @@ except FileNotFoundError:
 #### Figure 6: Code to read data from file
 On the first run, the file did not exist, so the except block created the file. Running the code again threw a “file must have ‘read’ and ‘readline’ attributes” error that was a little confusing (see Figure 7)
  
+![Figure 7](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure7.png "Unexpected error")
 #### Figure 7: Unexpected error
 Looking closer at the description for the pickle.load function (https://docs.python.org/3/library/pickle.html), it needs a file object rather than a file path or name like the open function. I exchanged the file name variable for the file object variable as shown in Figure 8.
 ```
@@ -89,6 +96,7 @@ try:
 #### Figure 8: Code for pickle.load
 This time, I discovered that empty files cause an error as shown in Figure 9.
  
+![Figure 9](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure9.png "Another unexpected error") 
 #### Figure 9: Another unexpected error
 I added an except block for the EOFError and was able to run the first part of the program as shown in Figure 10.
 ```
@@ -105,15 +113,19 @@ except EOFError:
 ```
 #### Figure 10: Code to read from file
  
+![Figure 11](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure11.png "FileNotFoundError") 
 #### Figure 11: Result for FileNotFoundError
 The message “Task list empty” in Figure 11 was triggered by the FileNotFoundError and tells me that the file had not existed before the script was run. The program continues running anyway and prints the empty list. Checking the folder, I can see that the ToDoFile.dat file has been created (see Figure 12).
  
+![Figure 12](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure12.png "New file created") 
 #### Figure 12: New file created by program
 If I exit and re-run the program, or use the Reload Data from File option before saving any data to the file, I get the result shown in Figure 13.
  
+![Figure 13](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure13.png "EOFError") 
 #### Figure 13: Result for EOFError
 “No data in file” was triggered by the EOFError and tells me that no information has been saved to the file yet. I can verify this by opening the file in Python (see Figure 14).
  
+![Figure 14](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure14.png "Empty .dat file") 
 #### Figure 14: Empty .dat file
 ### Writing to the File (pickle.dump)
 To write the data to the file, I changed the ‘write_data_to_file’ function to use pickle.dump with the file object instead of file.write (see Figure 15)
@@ -125,21 +137,26 @@ file.close()
 #### Figure 15: Code to write data to file
 After running the script, I can open the file in Python and see that data exists. Because it has been encoded during the pickle process, it is not very readable, but the data is there (see Figure 16).
  
+![Figure 16](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure16.png "Data in file") 
 #### Figure 16: Data in file
  
 ## Running the script
 To see whether the code functioned as intended, I first ran it in PyCharm. The data from ToDoFile.dat is printed along with the menu as shown in Figure 17.
  
+![Figure 17](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure17.png "Show current data") 
 #### Figure 17: Show current data - PyCharm
 For the most part, the program behaved just as it did in Module 6. When I chose option 2 and removed “dishes”, the program printed the updated list and returned to the menu as shown in Figure 18.
  
+![Figure 18](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure18.png "Removing a task") 
 #### Figure 18: Removing a task - PyCharm
 Next, I entered option 4 to reload the file data, then entered ‘y’ when asked if I wanted to reload the data. The reload function was called and the data unpickled to print the list of chores as shown in Figure 19.
   
+![Figure 19](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure19.png "Reload data from file") 
 #### Figure 19: Reload data from file - PyCharm
  
 Finally, I ran the program from the command window. I added a task and saved the data to the file using pickle.dump as shown in Figure 20.
  
+![Figure 20](https://github.com/jaws522/IntroToProg-Python-Mod07/blob/master/docs/images/Figure20.png "Run program – cmd") 
 #### Figure 20: Run program – cmd
 ## Summary
 Using the textbook, some additional websites, and the Module 7 documentation, I created the ‘To Do List3’ program using exception handling and pickling, and successfully ran it in PyCharm and the OS command window.
